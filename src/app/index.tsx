@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import AddNoteModal from "../components/addNoteModal";
 import DevelopmentScreen from "../components/developmentScreen";
 import FloatingButton from "../components/floatingButton";
 import Header from "../components/header";
@@ -16,19 +17,23 @@ interface Note {
 export default function App() {
     const [currentScreen, setCurrentScreen] = useState("Home");
     const [notes, setNotes] = useState<Note[]>([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const addNote = () => {
+    const addNote = (title: string, content: string, time: string) => {
         const newNote: Note = {
-            id: Date.now().toString(),
-            title: "anotation",
-            content: "anotationr",
-            time: "21:03",
+            id: Math.random().toString(),
+            title: title,
+            content: content,
+            time: time,
         };
-        setNotes((prevNotes) => [newNote, ...prevNotes]);
+
+        setNotes([newNote, ...notes]);
+        setIsModalVisible(false);
     };
 
     const deleteNote = (id: string) => {
-        setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+        const notesFiltradas = notes.filter((note) => note.id !== id);
+        setNotes(notesFiltradas);
     };
 
     if (currentScreen === "Development") {
@@ -40,8 +45,13 @@ export default function App() {
             <Header onNavigate={() => setCurrentScreen("Development")} />
             <ContentWrapper>
                 <NotesList notes={notes} onDeleteNote={deleteNote} />
-                <FloatingButton onPress={addNote} />
+                <FloatingButton onPress={() => setIsModalVisible(true)} />
             </ContentWrapper>
+            <AddNoteModal
+                visible={isModalVisible}
+                onClose={() => setIsModalVisible(false)}
+                onSave={addNote}
+            />
         </SafeArea>
     );
 }
