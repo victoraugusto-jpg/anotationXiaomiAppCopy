@@ -44,4 +44,5 @@ const Title = styled.Text`
 const IconsContainer = styled.View`
     flex-direction: row;
     align-items: center;
+    gap: 30px;
 `;
