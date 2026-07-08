@@ -2,11 +2,34 @@ import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import DevelopmentScreen from "../components/developmentScreen";
+import FloatingButton from "../components/floatingButton";
 import Header from "../components/header";
-import NoteCard from "../components/noteCard";
+import NotesList from "../components/notesList";
+
+interface Note {
+    id: string;
+    title: string;
+    content: string;
+    time: string;
+}
 
 export default function App() {
     const [currentScreen, setCurrentScreen] = useState("Home");
+    const [notes, setNotes] = useState<Note[]>([]);
+
+    const addNote = () => {
+        const newNote: Note = {
+            id: Date.now().toString(),
+            title: "anotation",
+            content: "anotationr",
+            time: "21:03",
+        };
+        setNotes((prevNotes) => [newNote, ...prevNotes]);
+    };
+
+    const deleteNote = (id: string) => {
+        setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+    };
 
     if (currentScreen === "Development") {
         return <DevelopmentScreen onGoBack={() => setCurrentScreen("Home")} />;
@@ -15,14 +38,9 @@ export default function App() {
     return (
         <SafeArea>
             <Header onNavigate={() => setCurrentScreen("Development")} />
-
             <ContentWrapper>
-                <NoteCard
-                    title="teste"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
-                    time="22:15"
-                    onDelete={() => console.log("akljçakjlçafskljç")}
-                />
+                <NotesList notes={notes} onDeleteNote={deleteNote} />
+                <FloatingButton onPress={addNote} />
             </ContentWrapper>
         </SafeArea>
     );
@@ -36,5 +54,5 @@ const SafeArea = styled(SafeAreaView)`
 const ContentWrapper = styled.View`
     flex: 1;
     padding: 0 20px;
-    margin-top: 10px;
+    margin-top: 20px;
 `;
