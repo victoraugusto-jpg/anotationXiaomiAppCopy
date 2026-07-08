@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Alert, TouchableOpacity } from "react-native";
+import { Alert } from "react-native";
 import styled from "styled-components/native";
 
 interface NoteCardProps {
@@ -7,6 +7,7 @@ interface NoteCardProps {
     content: string;
     time: string;
     onDelete: () => void;
+    onView: () => void;
 }
 
 export default function NoteCard({
@@ -14,6 +15,7 @@ export default function NoteCard({
     content,
     time,
     onDelete,
+    onView,
 }: NoteCardProps) {
     const confirmarExclusao = () => {
         Alert.alert("Excluir Nota", "Tem certeza que quer excluir?", [
@@ -30,15 +32,15 @@ export default function NoteCard({
 
     return (
         <CardContainer>
-            <ContentArea>
+            <ClickableArea onPress={onView} activeOpacity={0.7}>
                 <Title>{title}</Title>
                 <ContentText numberOfLines={2}>{content}</ContentText>
                 <TimeText>{time}</TimeText>
-            </ContentArea>
+            </ClickableArea>
 
-            <TouchableOpacity onPress={confirmarExclusao} activeOpacity={0.7}>
+            <DeleteButton onPress={confirmarExclusao} activeOpacity={0.7}>
                 <Ionicons name="trash-outline" size={24} color="#FF5252" />
-            </TouchableOpacity>
+            </DeleteButton>
         </CardContainer>
     );
 }
@@ -53,9 +55,13 @@ const CardContainer = styled.View`
     align-items: center;
 `;
 
-const ContentArea = styled.View`
+const ClickableArea = styled.TouchableOpacity`
     flex: 1;
     margin-right: 12px;
+`;
+
+const DeleteButton = styled.TouchableOpacity`
+    padding: 4px;
 `;
 
 const Title = styled.Text`

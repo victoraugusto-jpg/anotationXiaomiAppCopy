@@ -12,9 +12,14 @@ interface Note {
 interface NotesListProps {
     notes: Note[];
     onDeleteNote: (id: string) => void;
+    onViewNote: (note: Note) => void;
 }
 
-export default function NotesList({ notes, onDeleteNote }: NotesListProps) {
+export default function NotesList({
+    notes,
+    onDeleteNote,
+    onViewNote,
+}: NotesListProps) {
     return (
         <Container>
             <ListHeader>
@@ -31,6 +36,7 @@ export default function NotesList({ notes, onDeleteNote }: NotesListProps) {
                         content={item.content}
                         time={item.time}
                         onDelete={() => onDeleteNote(item.id)}
+                        onView={() => onViewNote(item)}
                     />
                 )}
                 showsVerticalScrollIndicator={false}

@@ -7,6 +7,7 @@ import DevelopmentScreen from "../components/developmentScreen";
 import FloatingButton from "../components/floatingButton";
 import Header from "../components/header";
 import NotesList from "../components/notesList";
+import ViewNoteModal from "../components/viewNoteModal";
 
 interface Note {
     id: string;
@@ -18,7 +19,11 @@ interface Note {
 export default function App() {
     const [currentScreen, setCurrentScreen] = useState("Home");
     const [notes, setNotes] = useState<Note[]>([]);
+
     const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const [isViewModalVisible, setIsViewModalVisible] = useState(false);
+    const [notaSelecionada, setNotaSelecionada] = useState<Note | null>(null);
 
     const mudarTela = (tela: string) => {
         setCurrentScreen(tela);
@@ -41,6 +46,16 @@ export default function App() {
         setNotes(notesFiltradas);
     };
 
+    const abrirVisualizacao = (nota: Note) => {
+        setNotaSelecionada(nota);
+        setIsViewModalVisible(true);
+    };
+
+    const fecharVisualizacao = () => {
+        setIsViewModalVisible(false);
+        setNotaSelecionada(null);
+    };
+
     if (currentScreen === "Development") {
         return <DevelopmentScreen onGoBack={() => setCurrentScreen("Home")} />;
     }
@@ -50,7 +65,11 @@ export default function App() {
             <Header onNavigate={() => mudarTela("Development")} />
 
             <ContentWrapper>
-                <NotesList notes={notes} onDeleteNote={deleteNote} />
+                <NotesList
+                    notes={notes}
+                    onDeleteNote={deleteNote}
+                    onViewNote={abrirVisualizacao}
+                />
                 <FloatingButton onPress={() => setIsModalVisible(true)} />
             </ContentWrapper>
 
@@ -60,6 +79,12 @@ export default function App() {
                 visible={isModalVisible}
                 onClose={() => setIsModalVisible(false)}
                 onSave={addNote}
+            />
+
+            <ViewNoteModal
+                visible={isViewModalVisible}
+                onClose={fecharVisualizacao}
+                note={notaSelecionada}
             />
         </SafeArea>
     );
