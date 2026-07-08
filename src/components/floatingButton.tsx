@@ -24,8 +24,4 @@ const ButtonContainer = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     elevation: 5;
-    shadow-color: #000;
-    shadow-offset: 0px 2px;
-    shadow-opacity: 0.25;
-    shadow-radius: 3.84px;
 `;
