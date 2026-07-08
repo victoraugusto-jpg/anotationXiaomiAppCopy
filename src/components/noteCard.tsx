@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 interface NoteCardProps {
@@ -15,6 +15,19 @@ export default function NoteCard({
     time,
     onDelete,
 }: NoteCardProps) {
+    const confirmarExclusao = () => {
+        Alert.alert("Excluir Nota", "Tem certeza que quer excluir?", [
+            {
+                text: "Não",
+                style: "cancel",
+            },
+            {
+                text: "Sim",
+                onPress: onDelete,
+            },
+        ]);
+    };
+
     return (
         <CardContainer>
             <ContentArea>
@@ -23,7 +36,7 @@ export default function NoteCard({
                 <TimeText>{time}</TimeText>
             </ContentArea>
 
-            <TouchableOpacity onPress={onDelete} activeOpacity={0.7}>
+            <TouchableOpacity onPress={confirmarExclusao} activeOpacity={0.7}>
                 <Ionicons name="trash-outline" size={24} color="#FF5252" />
             </TouchableOpacity>
         </CardContainer>
