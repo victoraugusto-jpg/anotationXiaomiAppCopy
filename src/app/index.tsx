@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import AddNoteModal from "../components/addNoteModal";
+import BottomNav from "../components/bottomNav";
 import DevelopmentScreen from "../components/developmentScreen";
 import FloatingButton from "../components/floatingButton";
 import Header from "../components/header";
@@ -18,6 +19,10 @@ export default function App() {
     const [currentScreen, setCurrentScreen] = useState("Home");
     const [notes, setNotes] = useState<Note[]>([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const mudarTela = (tela: string) => {
+        setCurrentScreen(tela);
+    };
 
     const addNote = (title: string, content: string, time: string) => {
         const newNote: Note = {
@@ -42,11 +47,15 @@ export default function App() {
 
     return (
         <SafeArea>
-            <Header onNavigate={() => setCurrentScreen("Development")} />
+            <Header onNavigate={() => mudarTela("Development")} />
+
             <ContentWrapper>
                 <NotesList notes={notes} onDeleteNote={deleteNote} />
                 <FloatingButton onPress={() => setIsModalVisible(true)} />
             </ContentWrapper>
+
+            <BottomNav onNavigate={mudarTela} />
+
             <AddNoteModal
                 visible={isModalVisible}
                 onClose={() => setIsModalVisible(false)}
